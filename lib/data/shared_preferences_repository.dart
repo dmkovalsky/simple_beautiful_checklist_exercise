@@ -8,6 +8,11 @@ class SharedPreferencesRepository implements DatabaseRepository {
     final prefs = await SharedPreferences.getInstance();
     // set the string list 'items' in SharedPreferences
     // by appending the new item to the existing list
+    /* simplify the code by using the spread operator
+      final items = prefs.getStringList('items') ?? [];
+      items.add(item);
+      prefs.setStringList('items', items);
+    */
     prefs.setStringList(
       'items',
       [...(prefs.getStringList('items') ?? []), item],
@@ -39,9 +44,12 @@ class SharedPreferencesRepository implements DatabaseRepository {
   }
 
   @override
-  Future<int> getItemCount() {
-    // TODO: implement getItemCount
-    throw UnimplementedError();
+  Future<int> getItemCount() async {
+    // instance of SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    final items = prefs.getStringList('items') ?? [];
+    // return the count of items in the list
+    return items.length;
   }
 
   @override
